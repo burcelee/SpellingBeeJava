@@ -1,2 +1,5 @@
 answer.txt
 problem.txt
+
+#class files
+*.class
