@@ -2,12 +2,16 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Random;
-
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class SpellingBee {
 
 	private static final String DICTIONARY_FILE = "dictionary.txt";
 	private static final String ALPHABET_FILE = "alphabet.txt";
+	private static final String PROBLEM_FILE = "problem.txt";
+	private static final String ANSWER_FILE = "answer.txt";
 	private static final int MINIMUM_WORD_LENGTH = 5;
 	private static final int NUMBER_OF_CHARACTERS = 7;
 	private static final int MINIMUM_ANSWER_WORDS = 15;
@@ -102,36 +106,53 @@ public class SpellingBee {
 				threePointAnswers.add(word);
 		}
 		
-		System.out.println("Total Words: " + answerList.size());
-		System.out.println("Three Point Words: " + threePointAnswers.size());
 		
-		for (int i = 0; i < threePointAnswers.size(); i++)  {
-			String word = threePointAnswers.get(i);
-			System.out.println(word);
-			answerList.remove(word);
+		File problem = new File(PROBLEM_FILE);
+		File answer = new File(ANSWER_FILE);
+		
+		try {
+			problem.createNewFile();
+			answer.createNewFile();
+			PrintWriter problemWriter = new PrintWriter(PROBLEM_FILE);
+			PrintWriter answerWriter = new PrintWriter(ANSWER_FILE);
+			
+			answerWriter.println("Total Words: " + answerList.size());
+			answerWriter.println("Three Point Words: " + threePointAnswers.size());
+			
+			for (int i = 0; i < threePointAnswers.size(); i++)  {
+				String word = threePointAnswers.get(i);
+				answerWriter.println(word);
+				answerList.remove(word);
+			}
+			
+			answerWriter.println("Non-three-point-words:");		
+			
+			for (int i = 0; i < answerList.size(); i++)  {
+				answerWriter.println(answerList.get(i));
+			}
+			
+			problemWriter.print(middle + "+");
+			characterList.remove(middle);
+			int i = 0;
+			while (characterList.size() > 0)  {
+				int j = Math.abs(rand.nextInt()) % characterList.size();
+				problemWriter.print(characterList.get(j));
+				characterList.remove(j);
+			}
+			problemWriter.println();
+			problemWriter.println("Total Words: " + answerList.size());
+			problemWriter.println("Three Point Words: " + threePointAnswers.size());
+			
+			problemWriter.close();
+			answerWriter.close();
+			
+		} catch (Exception e) {
+			System.out.println(e);
 		}
 		
-		System.out.println("Non-three-point-words:");		
 		
-		for (int i = 0; i < answerList.size(); i++)  {
-			System.out.println(answerList.get(i));
-		}
 		
-		for (int i = 0; i < 20; i++)  {
-			System.out.println();
-		}
-		
-		System.out.print(middle + "+");
-		characterList.remove(middle);
-		int i = 0;
-		while (characterList.size() > 0)  {
-			int j = Math.abs(rand.nextInt()) % characterList.size();
-			System.out.print(characterList.get(j));
-			characterList.remove(j);
-		}
-		System.out.println();
-		System.out.println("Total Words: " + answerList.size());
-		System.out.println("Three Point Words: " + threePointAnswers.size());
+
 		
 		
 	}
